@@ -1,0 +1,16 @@
+<?php
+
+namespace Halpdesk\LaravelMinimumPackage\Seeders;
+
+use Illuminate\Database\Seeder;
+
+class DatabaseSeeder extends Seeder
+{
+    public function run()
+    {
+        $this->call([
+            UsersSeeder::class,
+        ]);
+    }
+
+}
