@@ -30,7 +30,6 @@ class TestCase extends OrchestraTestCase
     {
         parent::setUp();
         $this->initialize();
-        $this->loadEnvironment();
 
         config([
             'stripe' => [
@@ -112,12 +111,12 @@ class TestCase extends OrchestraTestCase
     }
 
     /**
-     * Load environment from .env file and write all environment
-     * variables. Works well with laravels env() helper function
+     * Define environment setup.
      *
+     * @param  \Illuminate\Foundation\Application  $app
      * @return void
      */
-    public function loadEnvironment()
+    protected function getEnvironmentSetUp($app)
     {
         // $dotenv = new DotEnv(static::$dir, '.env');
         // $envs = $dotenv->toArray();
@@ -125,12 +124,13 @@ class TestCase extends OrchestraTestCase
         //     putenv($env.'='.$value);
         // }
 
-        $configFiles = glob(static::$dir.'config/*.php');
+        $configFiles = glob(static::$dir.'/config/*.php');
         foreach ($configFiles as $key => $configFile) {
             $name   = str_replace(".php", "", basename($configFile));
             $config = require $configFile;
             $existingConfig = Config::get($name, []);
-            Config::set($name, array_replace_recursive($existingConfig, $config));
+            // Config::set($name, array_replace_recursive($existingConfig, $config));
+            $app['config']->set($name, array_replace_recursive($existingConfig, $config));
         }
     }
 }
